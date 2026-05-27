@@ -32,7 +32,7 @@ function Home() {
       formData.append('job_description', jobDescription)
 
       const response = await axios.post(
-        'http://localhost:8000/resume/analyze',
+        'https://ai-resume-analyser-kzwq.onrender.com/resume/analyze',
         formData
       )
 
