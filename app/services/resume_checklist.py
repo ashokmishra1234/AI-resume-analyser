@@ -112,3 +112,42 @@ def generate_resume_checklist(resume_text, job_description):
             "missing": missing
         }
     }
+
+
+def generate_recommendations(resume_audit: dict, section_scores: dict,
+                              prioritized_missing_skills: list) -> list:
+    """
+    Generate up to 5 specific, actionable recommendations based on audit
+    results, section quality, and missing skills.  More concrete than generic
+    'learn X' suggestions.
+    """
+    recs = []
+    found_names = {item["name"] for item in resume_audit.get("found", [])}
+    missing_names = {item["name"] for item in resume_audit.get("missing", [])}
+
+    if "GitHub Profile" in missing_names:
+        recs.append("Add a GitHub profile link — recruiters expect to see your code.")
+
+    if "Deployment Links" in missing_names:
+        recs.append("Deploy at least one project and add the live URL to your resume.")
+
+    if "Quantified Achievements" in missing_names:
+        recs.append("Add 2–3 metrics to your projects or experience (e.g. 'reduced load time by 30%', 'served 5,000 users').")
+
+    if section_scores.get("Experience", 100) < 40:
+        recs.append("Rewrite experience bullet points starting with action verbs: Built, Developed, Optimised, Reduced.")
+
+    if section_scores.get("Projects", 100) < 40:
+        recs.append("Add at least 2 end-to-end projects with tech stack, description, and a GitHub or live link.")
+
+    if "LinkedIn Profile" in missing_names:
+        recs.append("Add your LinkedIn profile URL — many ATS systems cross-reference it.")
+
+    critical = [s["skill"] for s in prioritized_missing_skills if s["priority"] in ("High", "Critical")]
+    if critical:
+        recs.append(f"Build one project using {critical[0]} to close the most critical skill gap for this role.")
+
+    if section_scores.get("Achievements", 100) < 40:
+        recs.append("Add certifications, hackathon results, or academic rankings to the Achievements section.")
+
+    return recs[:5]

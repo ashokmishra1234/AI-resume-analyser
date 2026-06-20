@@ -13,7 +13,7 @@ import ResumeChecklist from '../components/ResumeChecklist'
 import SectionScoreCard from '../components/SectionScoreCard'
 import Skills from '../components/Skills'
 
-function Home() {
+function Home({ token }) {
 
   const [resume, setResume] = useState(null)
   const [jobDescription, setJobDescription] = useState('')
@@ -39,8 +39,9 @@ function Home() {
       formData.append('job_description', jobDescription)
 
       const response = await axios.post(
-        'https://ai-resume-analyser-kzwq.onrender.com/resume/analyze',
-        formData
+        'http://localhost:8000/resume/analyze',
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
       )
 
       setResult(response.data)

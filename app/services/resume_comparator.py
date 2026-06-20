@@ -21,5 +21,5 @@ def compare_resumes(resume1_score, resume2_score):
         "resume1_score": resume1_score,
         "resume2_score": resume2_score,
         "winner": winner,
-        "difference": abs(resume1_score - resume2_score)
+        "difference": round(abs(resume1_score - resume2_score), 2)
     }

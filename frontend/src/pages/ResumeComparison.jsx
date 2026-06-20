@@ -5,7 +5,7 @@ import ComparisonCard from '../components/ComparisonCard'
 import SectionScoreCard from '../components/SectionScoreCard'
 import Skills from '../components/Skills'
 
-function ResumeComparison() {
+function ResumeComparison({ token }) {
 
   const [resume1, setResume1] = useState(null)
   const [resume2, setResume2] = useState(null)
@@ -34,7 +34,8 @@ function ResumeComparison() {
 
       const response = await axios.post(
         'http://localhost:8000/resume/compare',
-        formData
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
       )
 
       setResult(response.data)
