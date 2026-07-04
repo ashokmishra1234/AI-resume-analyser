@@ -1,4 +1,4 @@
-fastapi
+fastapi==0.139.0
 uvicorn
 python-multipart
 pydantic
@@ -12,3 +12,6 @@ sqlalchemy
 passlib[bcrypt]
 bcrypt==4.0.1
 python-jose[cryptography]
+redis
+prometheus-client
+prometheus-fastapi-instrumentator

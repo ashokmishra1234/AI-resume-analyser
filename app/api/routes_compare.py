@@ -6,6 +6,7 @@ from app.services.ats_score import calculate_ats_score
 from app.services.resume_comparator import compare_resumes
 from app.services.section_scorer import score_sections
 from app.auth.auth_bearer import get_current_user
+from app.monitoring.metrics import comparisons_total
 
 router = APIRouter(prefix="/resume", tags=["Resume Comparison"])
 
@@ -30,6 +31,7 @@ async def compare_two_resumes(
     ats_score_2 = calculate_ats_score(matched2, missing2, section_scores_2)
 
     comparison = compare_resumes(ats_score_1, ats_score_2)
+    comparisons_total.inc()
 
     return {
         "resume1": {

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.database import engine
 from app.models import db_models
@@ -24,6 +25,9 @@ app.include_router(auth_router)
 app.include_router(resume_router)
 app.include_router(compare_router)
 app.include_router(history_router)
+
+# Expose /metrics endpoint for Prometheus scraping
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 
 @app.api_route("/", methods=["GET", "HEAD"])

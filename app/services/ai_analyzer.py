@@ -6,6 +6,7 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 
 from app.services.skill_matcher import match_skills
+from app.monitoring.metrics import llm_calls_total
 
 load_dotenv()
 
@@ -133,6 +134,7 @@ Respond in this EXACT JSON format — no markdown, no extra text outside the JSO
         if parsed and isinstance(parsed, dict):
             required = ["candidate_overview", "strengths", "improvement_areas", "recommended_actions"]
             if all(k in parsed for k in required):
+                llm_calls_total.labels(status="success").inc()
                 return {
                     "candidate_overview": parsed["candidate_overview"],
                     "strengths": parsed["strengths"],
@@ -140,10 +142,12 @@ Respond in this EXACT JSON format — no markdown, no extra text outside the JSO
                     "recommended_actions": parsed["recommended_actions"]
                 }
 
+        llm_calls_total.labels(status="fallback_text").inc()
         return _parse_text_response(response.content)
 
     except Exception as e:
         print(f"LLM API failed: {e}. Using structured fallback.")
+        llm_calls_total.labels(status="fallback_rule").inc()
         return generate_fallback_from_facts(structured_facts)
 
 
