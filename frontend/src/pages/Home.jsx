@@ -39,10 +39,10 @@ function Home({ token }) {
       formData.append('job_description', jobDescription)
 
       const response = await axios.post(
-        'http://localhost:8000/resume/analyze',
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+        `${import.meta.env.VITE_API_URL}/resume/analyze`,
+         formData,
+         { headers: { Authorization: `Bearer ${token}` } }
+       )
 
       setResult(response.data)
 

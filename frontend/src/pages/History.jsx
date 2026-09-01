@@ -8,7 +8,7 @@ function History({ token }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:8000/history/', {
+    axios.get(`${import.meta.env.VITE_API_URL}/history/`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
